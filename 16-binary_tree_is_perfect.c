@@ -1,41 +1,88 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_leaf - Checks if a node is a leaf.
+ * binary_tree_height - Measures the height of a binary tree.
  *
- * @node: Pointer to the node to check.
+ * @tree: pointer to the root node of the tree to measure the height.
  *
- * Return: 1 if node is a leaf, otherwise 0.
+ * Return: Height or if tree is NULL, your function must return 0.
  */
-int binary_tree_is_leaf(const binary_tree_t *node)
+size_t binary_tree_height(const binary_tree_t *tree)
 {
-	if (node == NULL)
-		return (0);
+	size_t lheight = 0, rheight = 0;
 
-	if (node->left == NULL && node->right == NULL)
-		return (1);
-	else
+	if (tree == NULL || (tree->left == NULL && tree->right == NULL))
 		return (0);
+	lheight = binary_tree_height(tree->left);
+	rheight = binary_tree_height(tree->right);
+
+	if (lheight > rheight)
+		return (lheight + 1);
+	else
+		return (rheight + 1);
 }
 
 /**
- * binary_tree_is_full - Checks if a binary tree is full.
+ * binary_tree_size - Measures the size of a binary tree.
  *
- * @tree: Pointer to the root node of the tree to measure the balance factor.
+ * @tree: pointer to the root node of the tree to measure the size.
  *
- * Return: 1 for full other case 0.
+ * Return: Depth or if tree is NULL, your function must return 0.
  */
-int binary_tree_is_full(const binary_tree_t *tree)
+size_t binary_tree_size(const binary_tree_t *tree)
 {
-	int left = 0, right = 0;
+	if (tree == NULL)
+		return (0);
+	return (binary_tree_size(tree->left) + binary_tree_size(tree->right) + 1);
+}
+
+/**
+ * _pow_recursion - function that returns the value of x raised
+ * to the power of y.
+ *
+ * @x: variable x
+ * @y: variable y
+ *
+ * Return: Always 0.
+ */
+
+int _pow_recursion(int x, int y)
+{
+
+	if (y < 0)
+	{
+		return (-1);
+	}
+
+	if (y == 0)
+	{
+		return (1);
+	}
+
+	return (x * (_pow_recursion(x, y - 1)));
+}
+
+/**
+ * binary_tree_is_perfect -Function that checks if a binary tree is perfect.
+ *
+ * @tree: Pointer to the root node of the tree to check.
+ *
+ * Return: Always 0 (Success)
+  */
+int binary_tree_is_perfect(const binary_tree_t *tree)
+{
+	int size;
+	int height;
+	int max;
 
 	if (tree == NULL)
 		return (0);
-	if (binary_tree_is_leaf(tree))
+
+	height = binary_tree_height(tree);
+	size = binary_tree_size(tree);
+	max = _pow_recursion(2, height + 1) - 1;
+	if (max == size)
 		return (1);
-	left = binary_tree_is_full(tree->left);
-	right = binary_tree_is_full(tree->right);
-	if (left == 0 || right == 0)
+	else
 		return (0);
-	return (1);
 }
